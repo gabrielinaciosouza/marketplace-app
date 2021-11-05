@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-Future<dynamic> _readMockFile(String file) async {
+Future<dynamic> _readMockFile(String jsonPath) async {
   String directory = Directory.current.path;
   if (directory.endsWith('/test')) {
     directory = directory.replaceAll('/test', '');
   }
   return json
-      .decode(File('$directory/test/mocks/json/$file').readAsStringSync());
+      .decode(File('$directory/test/mocks/json/$jsonPath').readAsStringSync());
 }
 
-Future<Map<String, dynamic>> jsonToMap(String file) =>
-    _readMockFile(file).then((value) => value as Map<String, dynamic>);
+Future<Map<String, dynamic>> jsonToMap(String jsonPath) =>
+    _readMockFile(jsonPath).then((value) => value as Map<String, dynamic>);

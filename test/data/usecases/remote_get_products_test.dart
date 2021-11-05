@@ -8,15 +8,37 @@ import '../../mocks/mock_utils.dart';
 class MockHttpAdapter extends Mock implements HttpClient {}
 
 void main() {
-  test('Should call HttpClient.get with correct values', () async {
-    final httpClient = MockHttpAdapter();
-    final url = faker.internet.httpUrl();
-    final sut = RemoteGetProducts(httpClient, url: url);
-    when(() => httpClient.get(url: url))
-        .thenAnswer((invocation) => jsonToMap('product_response.json'));
+  late HttpClient httpClient;
+  late String url;
+  late RemoteGetProducts sut;
 
+  const productResponsePath = 'product_response.json';
+
+  setUp(() {
+    httpClient = MockHttpAdapter();
+    url = faker.internet.httpsUrl();
+    sut = RemoteGetProducts(httpClient, url: url);
+  });
+
+  When mockHttpClientGetCall() => when(() => httpClient.get(url: url));
+
+  Future<void> mockHttpClientGetResponse(String jsonPath) async =>
+      mockHttpClientGetCall().thenAnswer((_) async => jsonToMap(jsonPath));
+
+  void mockHttpClientGetError() =>
+      mockHttpClientGetCall().thenThrow(Exception());
+
+  test('Should call HttpClient.get with correct values', () async {
+    await mockHttpClientGetResponse(productResponsePath);
     await sut.getProducts();
 
     verify(() => httpClient.get(url: url)).called(1);
+  });
+
+  test('Should throw if HttpClient throws', () {
+    mockHttpClientGetError();
+    final future = sut.getProducts();
+
+    expect(future, throwsA(isA<Exception>()));
   });
 }
