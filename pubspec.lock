@@ -107,7 +107,7 @@ packages:
     source: hosted
     version: "1.2.0"
   faker:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: faker
       url: "https://pub.dartlang.org"
@@ -215,7 +215,7 @@ packages:
     source: hosted
     version: "1.0.1"
   mocktail:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: mocktail
       url: "https://pub.dartlang.org"
