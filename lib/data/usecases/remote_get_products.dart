@@ -8,12 +8,18 @@ class RemoteGetProducts implements GetProducts {
   const RemoteGetProducts(this._httpClient, {required this.url});
   @override
   Future<List<Product>> getProducts() async {
-    final result = await _httpClient.get(url: url);
+    try {
+      final result = await _httpClient.get(url: url);
 
-    final products = result['products'] as List<dynamic>;
+      final List<dynamic>? products = result?['products'];
 
-    return products
-        .map((product) => ProductData.fromJson(product).toEntity())
-        .toList();
+      if (products == null) throw const ServerError();
+
+      return products
+          .map((product) => ProductData.fromJson(product).toEntity())
+          .toList();
+    } catch (error) {
+      throw const ServerError();
+    }
   }
 }
