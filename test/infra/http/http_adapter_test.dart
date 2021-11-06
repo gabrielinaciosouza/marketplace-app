@@ -40,6 +40,12 @@ void main() {
         url: url,
       );
 
+  void mockGetError() => mockClientGetError(
+      client: client,
+      headers: headers,
+      url: url,
+      exception: const HttpServerError());
+
   test('Should call http get with correct values', () async {
     await sut.get(url: url, headers: headers);
 
@@ -62,11 +68,7 @@ void main() {
   });
 
   test('Should throw HttpServerError if Client throws', () {
-    mockClientGetError(
-        client: client,
-        headers: headers,
-        url: url,
-        exception: const HttpServerError());
+    mockGetError();
 
     final future = sut.get(url: url, headers: headers);
 
