@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 import 'package:marketplace_app/data/data.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../mocks.dart';
+import '../../mocks.dart';
 
 class _MockHttpAdapter extends Mock implements HttpClient {}
 
