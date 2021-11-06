@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 import 'package:marketplace_app/infra/infra.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../mocks/http/http.dart';
+import '../../mocks/mocks.dart';
 
 void main() {
   late HttpAdapter sut;
