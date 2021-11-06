@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:marketplace_app/data/data.dart';
 
+import '../../data/data.dart';
 import '../infra.dart';
 
 class HttpAdapter implements HttpClient {
