@@ -2,27 +2,27 @@ import '../../domain/domain.dart';
 
 class ProductData {
   final String id;
-  final String productName;
+  final String name;
   final double price;
   final String imageUrl;
 
   const ProductData({
     required this.id,
-    required this.productName,
+    required this.name,
     required this.price,
     required this.imageUrl,
   });
 
   factory ProductData.fromJson(Map<String, dynamic> json) => ProductData(
         id: json['id'],
-        productName: json['productName'],
+        name: json['name'],
         price: json['price'],
         imageUrl: json['imageUrl'],
       );
 
   Product toEntity() => Product(
         id: id,
-        productName: productName,
+        name: name,
         price: price,
         imageUrl: imageUrl,
       );
@@ -32,7 +32,7 @@ class ProductData {
       other is ProductData &&
       other.runtimeType == runtimeType &&
       other.id == id &&
-      other.productName == productName &&
+      other.name == name &&
       other.price == price &&
       other.imageUrl == imageUrl;
 

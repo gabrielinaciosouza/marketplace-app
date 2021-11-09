@@ -8,6 +8,11 @@ class PtBr implements Translations {
   String get appTitle => 'Marketplace';
 
   @override
-  String get serverErrorMessage =>
-      'Aconteceu um erro inesperado, tente novamente.';
+  String get serverErrorMessage => 'Erro! Por favor, tente novamente.';
+
+  @override
+  String get retry => 'Recarregar';
+
+  @override
+  String get emptyList => 'Lista Vazia';
 }

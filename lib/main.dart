@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 
+import 'data/data.dart';
+import 'infra/infra.dart';
+import 'presentation/presentation.dart';
 import 'ui/ui.dart';
 
 void main() {
@@ -18,7 +22,11 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: debugShowCheckedModeBanner,
       title: R.strings.appTitle,
       theme: appTheme,
-      home: const HomePage(),
+      home: LoadingOverlay(
+        child: HomePage(StreamHomePresenter(RemoteGetProducts(
+            HttpAdapter(Client()),
+            url: 'http://192.168.0.105:8080/products/'))),
+      ),
     );
   }
 

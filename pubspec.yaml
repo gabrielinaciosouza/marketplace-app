@@ -22,6 +22,7 @@ dev_dependencies:
   mocktail: ^0.2.0
   faker: ^2.0.0
   flutter_lints: ^1.0.0
+  mocktail_image_network: ^0.2.0
 
 flutter:
   uses-material-design: true
