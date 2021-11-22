@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
 
-import 'data/data.dart';
-import 'infra/infra.dart';
-import 'presentation/presentation.dart';
+import 'main/main.dart';
 import 'ui/ui.dart';
 
 void main() {
@@ -22,11 +19,8 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: debugShowCheckedModeBanner,
       title: R.strings.appTitle,
       theme: appTheme,
-      home: LoadingOverlay(
-        child: HomePage(StreamHomePresenter(RemoteGetProducts(
-            HttpAdapter(Client()),
-            url: 'https://shelf-marketplace.herokuapp.com/products/'))),
-      ),
+      builder: builder,
+      home: homePage,
     );
   }
 
