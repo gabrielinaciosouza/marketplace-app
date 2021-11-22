@@ -19,26 +19,29 @@ class ProductCardImage extends StatelessWidget {
           child: PhysicalModel(
             color: shadowColor,
             elevation: productImageElevation,
-            shape: BoxShape.circle,
+            borderRadius: BorderRadius.circular(borderRadius16),
             child: Container(
               height: constraints.maxHeight / productImageDivisor,
               width: constraints.maxHeight / productImageDivisor,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(borderRadius16),
                 color: white,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(spacing24),
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stactrace) {
-                    return Icon(
-                      Icons.image_not_supported,
-                      color: primary,
-                      size: constraints.maxHeight / iconPlaceHolderDivisor,
-                    );
-                  },
+                padding: const EdgeInsets.all(spacing8),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(borderRadius16),
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.fill,
+                    errorBuilder: (context, error, stactrace) {
+                      return Icon(
+                        Icons.image_not_supported,
+                        color: primary,
+                        size: constraints.maxHeight / iconPlaceHolderDivisor,
+                      );
+                    },
+                  ),
                 ),
               ),
             ),

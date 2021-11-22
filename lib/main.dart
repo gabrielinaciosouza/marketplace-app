@@ -25,7 +25,7 @@ class App extends StatelessWidget {
       home: LoadingOverlay(
         child: HomePage(StreamHomePresenter(RemoteGetProducts(
             HttpAdapter(Client()),
-            url: 'http://192.168.0.105:8080/products/'))),
+            url: 'https://shelf-marketplace.herokuapp.com/products/'))),
       ),
     );
   }
