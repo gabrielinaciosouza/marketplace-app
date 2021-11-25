@@ -1,15 +1,14 @@
-import '../../domain/domain.dart';
-import '../data.dart';
+import '../../../domain/domain.dart';
+import '../../data.dart';
 
-class RemoteGetProducts implements GetProducts {
-  final HttpClient _httpClient;
-  final String url;
+class LocalGetProducts implements GetProducts {
+  final CacheStorage _cacheStorage;
 
-  const RemoteGetProducts(this._httpClient, {required this.url});
+  const LocalGetProducts(this._cacheStorage);
   @override
   Future<List<Product>> getProducts() async {
     try {
-      final result = await _httpClient.get(url: url);
+      final result = await _cacheStorage.get(key: 'products');
 
       final List<dynamic>? products = result?['products'];
 

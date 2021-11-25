@@ -4,7 +4,7 @@ import 'package:marketplace_app/data/data.dart';
 import 'package:marketplace_app/domain/domain.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../mocks/mocks.dart';
+import '../../../mocks/mocks.dart';
 
 void main() {
   late HttpClient httpClient;

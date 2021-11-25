@@ -131,7 +131,8 @@ void main() {
                 id: faker.guid.guid(),
                 name: index.toString(),
                 price: baseProduct.price,
-                imageUrl: baseProduct.imageUrl),
+                imageUrl: baseProduct.imageUrl,
+                categoryId: baseProduct.categoryId),
           ),
         );
         await loadPage(tester);
