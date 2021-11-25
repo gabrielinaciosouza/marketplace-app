@@ -33,13 +33,13 @@ void mockHttpClientGetError(
 When mockClientGetCall(
         {required Client client,
         required String url,
-        required Map<String, String> headers}) =>
+        Map<String, String>? headers}) =>
     when(() => client.get(Uri.parse(url), headers: headers));
 
 void mockClientGetResponse(
         {required Client client,
         required String url,
-        required Map<String, String> headers,
+        Map<String, String>? headers,
         required Map<String, dynamic>? response,
         required int statusCode}) =>
     mockClientGetCall(client: client, url: url, headers: headers)

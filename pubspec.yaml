@@ -15,6 +15,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^0.13.4
   intl: ^0.17.0
+  equatable: ^2.0.3
+  flutter_bloc: ^8.0.0
 
 dev_dependencies:
   flutter_test:
@@ -22,6 +24,8 @@ dev_dependencies:
   mocktail: ^0.2.0
   faker: ^2.0.0
   flutter_lints: ^1.0.0
+  mocktail_image_network: ^0.2.0
+  bloc_test: ^9.0.1
 
 flutter:
   uses-material-design: true

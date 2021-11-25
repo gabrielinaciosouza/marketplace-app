@@ -1,1 +1,1 @@
-String get productResponsePath => 'product_response.json';
+const productResponsePath = 'product_response.json';
