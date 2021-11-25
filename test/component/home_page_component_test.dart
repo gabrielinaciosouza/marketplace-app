@@ -6,7 +6,6 @@ import 'package:http/http.dart';
 import 'package:marketplace_app/data/data.dart';
 import 'package:marketplace_app/infra/infra.dart';
 import 'package:marketplace_app/presentation/presentation.dart';
-import 'package:marketplace_app/ui/ui.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 import '../helpers/test_helpers.dart';
@@ -26,36 +25,36 @@ void main() {
   Future<void> loadPage(WidgetTester tester) async {
     final homePage = buildApp(
       HomePage(
-        StreamHomePresenter(
+        HomeCubit(
           RemoteGetProducts(HttpAdapter(client), url: url),
         ),
       ),
     );
 
-    await mockNetworkImages(() async => tester.pumpWidget(homePage));
+    await tester.pumpWidget(homePage);
   }
 
   testWidgets('Should load products', (WidgetTester tester) async {
-    mockClientGetResponse(
-        client: client, response: response, statusCode: 200, url: url);
+    await mockNetworkImages(() async {
+      mockClientGetResponse(
+          client: client, response: response, statusCode: 200, url: url);
 
-    await loadPage(tester);
-    await tester.pump();
+      await loadPage(tester);
+      await tester.pump();
 
-    expect(
-        find.byWidgetPredicate((widget) =>
-            widget is ProductCard && widget.product == baseProductViewModel),
-        findsOneWidget);
+      expect(
+          find.byWidgetPredicate((widget) =>
+              widget is ProductCard && widget.product == baseProductViewModel),
+          findsOneWidget);
+    });
   });
 
   testWidgets('Should show error', (WidgetTester tester) async {
     mockClientGetResponse(
         client: client, response: response, statusCode: 500, url: url);
 
-    await runZonedGuarded(() async {
-      await loadPage(tester);
-      await tester.pump(); // starting point of app
-    }, (error, stackTrace) {});
+    await loadPage(tester);
+    await tester.pump(); // starting point of app
 
     expect(find.byType(RetryErrorMessage), findsOneWidget);
   });

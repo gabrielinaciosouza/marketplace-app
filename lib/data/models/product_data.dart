@@ -1,6 +1,8 @@
+import 'package:equatable/equatable.dart';
+
 import '../../domain/domain.dart';
 
-class ProductData {
+class ProductData with EquatableMixin {
   final String id;
   final String name;
   final double price;
@@ -28,14 +30,5 @@ class ProductData {
       );
 
   @override
-  bool operator ==(Object other) =>
-      other is ProductData &&
-      other.runtimeType == runtimeType &&
-      other.id == id &&
-      other.name == name &&
-      other.price == price &&
-      other.imageUrl == imageUrl;
-
-  @override
-  int get hashCode => id.hashCode;
+  List<Object?> get props => [id, name, price, imageUrl];
 }

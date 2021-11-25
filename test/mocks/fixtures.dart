@@ -1,5 +1,5 @@
 import 'package:marketplace_app/domain/domain.dart';
-import 'package:marketplace_app/ui/ui.dart';
+import 'package:marketplace_app/presentation/presentation.dart';
 
 const baseProduct = Product(
     id: "1",

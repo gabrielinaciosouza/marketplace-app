@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'main/main.dart';
-import 'ui/ui.dart';
+import 'presentation/presentation.dart';
 
 void main() {
   runApp(const App());
@@ -19,8 +19,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: debugShowCheckedModeBanner,
       title: R.strings.appTitle,
       theme: appTheme,
-      builder: builder,
-      home: homePage,
+      home: makeHomePage,
     );
   }
 
