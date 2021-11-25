@@ -1,3 +1,4 @@
+import 'package:hive/hive.dart';
 import 'package:marketplace_app/data/data.dart';
 import 'package:marketplace_app/domain/domain.dart';
 import 'package:mocktail/mocktail.dart';
@@ -23,3 +24,26 @@ void mockCacheStorageGetError(
         {required String key, required CacheStorage cacheStorage}) =>
     mockCacheStorageGetCall(key: key, cacheStorage: cacheStorage)
         .thenThrow(const ServerError());
+
+When mockBoxGetCall({required Box box, required String key}) =>
+    when(() => box.get(key));
+
+void mockBoxGetResponse(
+        {required Box box, required String key, required dynamic response}) =>
+    mockBoxGetCall(box: box, key: key).thenAnswer((_) async => response);
+
+void mockBoxGetError({required Box box, required String key}) =>
+    mockBoxGetCall(box: box, key: key).thenThrow(Exception());
+
+When mockBoxPutCall(
+        {required Box box, required String key, required String value}) =>
+    when(() => box.put(key, value));
+
+void mockBoxPutResponse(
+        {required Box box, required String key, required String value}) =>
+    mockBoxPutCall(box: box, key: key, value: value)
+        .thenAnswer((_) => Future.value());
+
+void mockBoxPutError(
+        {required Box box, required String key, required String value}) =>
+    mockBoxPutCall(box: box, key: key, value: value).thenThrow(Exception());
