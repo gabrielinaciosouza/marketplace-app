@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
 import 'package:marketplace_app/data/data.dart';
 import 'package:marketplace_app/domain/domain.dart';
@@ -36,14 +38,20 @@ void mockBoxGetError({required Box box, required String key}) =>
     mockBoxGetCall(box: box, key: key).thenThrow(Exception());
 
 When mockBoxPutCall(
-        {required Box box, required String key, required String value}) =>
-    when(() => box.put(key, value));
+        {required Box box,
+        required String key,
+        required Map<String, dynamic> value}) =>
+    when(() => box.put(key, jsonEncode(value)));
 
 void mockBoxPutResponse(
-        {required Box box, required String key, required String value}) =>
+        {required Box box,
+        required String key,
+        required Map<String, dynamic> value}) =>
     mockBoxPutCall(box: box, key: key, value: value)
         .thenAnswer((_) => Future.value());
 
 void mockBoxPutError(
-        {required Box box, required String key, required String value}) =>
+        {required Box box,
+        required String key,
+        required Map<String, dynamic> value}) =>
     mockBoxPutCall(box: box, key: key, value: value).thenThrow(Exception());

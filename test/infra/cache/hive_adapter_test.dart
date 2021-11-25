@@ -15,14 +15,14 @@ void main() {
   late CacheStorage sut;
   late Box box;
   late String key;
-  late String value;
+  late Map<String, dynamic> value;
   late String response;
 
   setUp(() async {
     box = MockBox();
     sut = HiveAdapter(box);
     key = faker.lorem.word();
-    value = faker.lorem.word();
+    value = {faker.lorem.word(): faker.lorem.word()};
 
     final decodedResponse = await jsonToMap(productResponsePath);
     response = jsonEncode(decodedResponse);
@@ -56,7 +56,7 @@ void main() {
     test('Should call save with correct values', () async {
       await sut.save(key: key, value: value);
 
-      verify(() => box.put(key, value)).called(1);
+      verify(() => box.put(key, jsonEncode(value))).called(1);
     });
 
     test('Should throw if box throws', () {

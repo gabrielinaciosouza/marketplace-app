@@ -16,6 +16,7 @@ class HiveAdapter implements CacheStorage {
   }
 
   @override
-  Future<void> save({required String key, required String value}) async =>
-      await _box.put(key, value);
+  Future<void> save(
+          {required String key, required Map<String, dynamic> value}) async =>
+      await _box.put(key, jsonEncode(value));
 }
