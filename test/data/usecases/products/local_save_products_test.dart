@@ -25,7 +25,7 @@ void main() {
   });
 
   test('Should call CacheStorage.save with correct values', () async {
-    await sut.save(products);
+    await sut.saveProducts(products);
 
     verify(() => cacheStorage.save(key: key, value: value)).called(1);
   });
@@ -34,7 +34,7 @@ void main() {
     mockCacheStorageSaveError(
         cacheStorage: cacheStorage, key: key, value: value);
 
-    final future = sut.save(products);
+    final future = sut.saveProducts(products);
 
     expect(future, throwsA(const ServerError()));
   });

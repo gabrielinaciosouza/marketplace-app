@@ -16,7 +16,7 @@ class GetProductsComposite implements GetProducts {
   Future<List<Product>> getProducts() async {
     try {
       final products = await _remoteGetProducts.getProducts();
-      await _localSaveProducts.save(products);
+      await _localSaveProducts.saveProducts(products);
       return products;
     } catch (error) {
       final products = await _localGetProducts.getProducts();

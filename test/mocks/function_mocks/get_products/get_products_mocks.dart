@@ -21,7 +21,7 @@ When mockGetProductsCall(GetProducts getProducts) =>
     when(() => getProducts.getProducts());
 
 When mockSaveProductsCall(SaveProducts saveProducts) =>
-    when(() => saveProducts.save([baseProduct]));
+    when(() => saveProducts.saveProducts([baseProduct]));
 
 When mockGetLocalProductsCall(GetProducts getProducts) =>
     when(() => getProducts.getProducts());

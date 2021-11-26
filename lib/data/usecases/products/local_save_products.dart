@@ -6,7 +6,7 @@ class LocalSaveProducts implements SaveProducts {
 
   const LocalSaveProducts(this._cacheStorage);
   @override
-  Future<void> save(List<Product> products) async {
+  Future<void> saveProducts(List<Product> products) async {
     try {
       await _cacheStorage.save(
         key: kProducts,

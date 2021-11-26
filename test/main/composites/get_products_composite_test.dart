@@ -36,7 +36,7 @@ void main() {
   test('Should call LocalSaveProducts', () async {
     await sut.getProducts();
 
-    verify(() => localSaveProducts.save(products)).called(1);
+    verify(() => localSaveProducts.saveProducts(products)).called(1);
   });
 
   test('Should return products on success', () async {
