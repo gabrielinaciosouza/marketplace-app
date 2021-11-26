@@ -1,5 +1,5 @@
-import '../../domain/domain.dart';
-import '../data.dart';
+import '../../../domain/domain.dart';
+import '../../data.dart';
 
 class RemoteGetProducts implements GetProducts {
   final HttpClient _httpClient;
@@ -11,7 +11,7 @@ class RemoteGetProducts implements GetProducts {
     try {
       final result = await _httpClient.get(url: url);
 
-      final List<dynamic>? products = result?['products'];
+      final List<dynamic>? products = result?[kProducts];
 
       if (products == null) throw const ServerError();
 

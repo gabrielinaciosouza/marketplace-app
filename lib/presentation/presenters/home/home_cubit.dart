@@ -7,9 +7,9 @@ import '../../presentation.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  final GetProducts _getProducts;
+  final GetHome _getHome;
 
-  HomeCubit(this._getProducts) : super(HomeState.initialState());
+  HomeCubit(this._getHome) : super(HomeState.initialState());
 
   Future<void> loadProducts() async {
     try {
@@ -21,14 +21,19 @@ class HomeCubit extends Cubit<HomeState> {
         ),
       );
 
-      final result = await _getProducts.getProducts();
-      final products = result
+      final result = await _getHome.getHome();
+      final products = result.products
           .map((product) => ProductViewModel.fromEntity(product))
           .toList();
+      final categories = result.categories
+          .map((category) => CategoryViewModel.fromEntity(category))
+          .toList();
 
-      emit(
-        state.copyWith(isLoading: false, products: products),
-      );
+      emit(state.copyWith(
+          isLoading: false,
+          products: products,
+          categories: categories,
+          selectedCategory: _selectedCategory(categories)));
     } catch (error, stacktrace) {
       emit(
         state.copyWith(
@@ -40,4 +45,12 @@ class HomeCubit extends Cubit<HomeState> {
       addError(error, stacktrace);
     }
   }
+
+  CategoryViewModel? _selectedCategory(List<CategoryViewModel> categories) {
+    if (state.selectedCategory != null) return state.selectedCategory;
+    if (categories.isNotEmpty) return categories.first;
+  }
+
+  void selectCategory(CategoryViewModel categoryViewModel) =>
+      emit(state.copyWith(selectedCategory: categoryViewModel));
 }

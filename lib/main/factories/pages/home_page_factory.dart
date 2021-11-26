@@ -1,5 +1,8 @@
-import 'package:marketplace_app/presentation/presentation.dart';
-
+import '../../../presentation/presentation.dart';
 import '../../main.dart';
 
-HomePage get makeHomePage => HomePage(HomeCubit(makeRemoteGetProducts));
+Future<HomePage> get makeHomePage async {
+  final getHomeComposite = await makeGetHomeComposite;
+
+  return HomePage(HomeCubit(getHomeComposite));
+}

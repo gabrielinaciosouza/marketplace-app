@@ -13,12 +13,12 @@ import '../../mocks/mocks.dart';
 
 void main() {
   late HomeCubit homeCubit;
-  late GetProducts getProducts;
+  late GetHome getHome;
 
   setUp(() {
-    getProducts = mockGetProducts;
-    homeCubit = HomeCubit(getProducts);
-    mockGetProductsResponse(getProducts);
+    getHome = mockRemoteGetHome;
+    homeCubit = HomeCubit(getHome);
+    mockGetHomeResponse(getHome);
   });
 
   Future<void> loadPage(WidgetTester tester) async => tester.pumpWidget(
@@ -34,7 +34,7 @@ void main() {
         () async {
           await loadPage(tester);
 
-          verify(() => getProducts.getProducts()).called(1);
+          verify(() => getHome.getHome()).called(1);
         },
       );
     },
@@ -87,7 +87,7 @@ void main() {
 
   testWidgets('Should present error if GetProducts throw serverError',
       (WidgetTester tester) async {
-    mockGetProductsError(getProducts: getProducts, exception: Exception());
+    mockGetHomeError(getHome);
 
     await loadPage(tester);
     await tester.pump();
@@ -98,18 +98,19 @@ void main() {
 
   testWidgets('Should call loadProducts on reload button click',
       (WidgetTester tester) async {
-    mockGetProductsError(getProducts: getProducts, exception: Exception());
+    mockGetHomeError(getHome);
     await loadPage(tester);
 
     await tester.pump();
     await tester.tap(find.byType(RetryButton));
 
-    verify(() => getProducts.getProducts()).called(2);
+    verify(() => getHome.getHome()).called(2);
   });
 
   testWidgets('Should render empty list message', (WidgetTester tester) async {
     await mockNetworkImages(() async {
-      mockGetProductsResponse(getProducts, response: []);
+      mockGetHomeResponse(getHome,
+          response: const Home(products: [], categories: []));
       await loadPage(tester);
 
       await tester.pump();
@@ -123,16 +124,19 @@ void main() {
     'Should scroll product list',
     (WidgetTester tester) async {
       await mockNetworkImages(() async {
-        mockGetProductsResponse(
-          getProducts,
-          response: List.generate(
-            4,
-            (index) => Product(
-                id: faker.guid.guid(),
-                name: index.toString(),
-                price: baseProduct.price,
-                imageUrl: baseProduct.imageUrl),
-          ),
+        mockGetHomeResponse(
+          getHome,
+          response: Home(
+              products: List.generate(
+                4,
+                (index) => Product(
+                    id: faker.guid.guid(),
+                    name: index.toString(),
+                    price: baseProduct.price,
+                    imageUrl: baseProduct.imageUrl,
+                    categoryId: baseProduct.categoryId),
+              ),
+              categories: []),
         );
         await loadPage(tester);
 
@@ -163,6 +167,100 @@ void main() {
                 widget is ProductCard && widget.product.name == '0'),
             findsNothing);
       });
+    },
+  );
+
+  testWidgets(
+    'Should scroll category list',
+    (WidgetTester tester) async {
+      await mockNetworkImages(
+        () async {
+          mockGetHomeResponse(
+            getHome,
+            response: Home(
+              products: [baseProduct],
+              categories: List.generate(
+                8,
+                (index) => Category(
+                  id: faker.guid.guid(),
+                  name: index.toString(),
+                ),
+              ),
+            ),
+          );
+          await loadPage(tester);
+
+          await tester.pump();
+
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is CategoryItem &&
+                  widget.categoryViewModel.name == '0'),
+              findsOneWidget);
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is CategoryItem &&
+                  widget.categoryViewModel.name == '7'),
+              findsNothing);
+
+          await tester.drag(
+              find.byWidgetPredicate((widget) =>
+                  widget is CategoryItem &&
+                  widget.categoryViewModel.name == '0'),
+              const Offset(-500, 0));
+
+          await tester.pump();
+
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is CategoryItem &&
+                  widget.categoryViewModel.name == '7'),
+              findsOneWidget);
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is CategoryItem &&
+                  widget.categoryViewModel.name == '0'),
+              findsNothing);
+        },
+      );
+    },
+  );
+
+  testWidgets(
+    'Should select category item',
+    (WidgetTester tester) async {
+      await mockNetworkImages(
+        () async {
+          mockGetHomeResponse(getHome,
+              response: Home(
+                  products: [baseProduct],
+                  categories: List.generate(
+                    3,
+                    (index) => Category(
+                      id: faker.guid.guid(),
+                      name: index.toString(),
+                    ),
+                  )));
+          await loadPage(tester);
+
+          await tester.pump();
+
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is SelectedCategoryItem && widget.name == '0'),
+              findsOneWidget);
+
+          await tester.tap(find.byWidgetPredicate((widget) =>
+              widget is CategoryItem && widget.categoryViewModel.name == '1'));
+
+          await tester.pump();
+
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is SelectedCategoryItem && widget.name == '1'),
+              findsOneWidget);
+        },
+      );
     },
   );
 }

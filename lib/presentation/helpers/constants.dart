@@ -11,6 +11,7 @@ const priceFontSize = 16.0;
 
 const bigIconSize = 64.0;
 
+const spacing1 = 1.0;
 const spacing8 = 8.0;
 const spacing16 = 16.0;
 const spacing24 = 24.0;
@@ -24,6 +25,7 @@ const productImageDivisor = 2;
 const iconPlaceHolderDivisor = 6;
 
 const flex55 = 55;
+const flex15 = 15;
 
 const maxLines2 = 2;
 

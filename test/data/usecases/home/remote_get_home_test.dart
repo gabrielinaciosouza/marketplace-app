@@ -4,23 +4,23 @@ import 'package:marketplace_app/data/data.dart';
 import 'package:marketplace_app/domain/domain.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../mocks/mocks.dart';
+import '../../../mocks/mocks.dart';
 
 void main() {
   late HttpClient httpClient;
   late String url;
-  late RemoteGetProducts sut;
+  late RemoteGetHome sut;
 
   setUp(() async {
     httpClient = mockHttpClient;
     url = faker.internet.httpsUrl();
-    sut = RemoteGetProducts(httpClient, url: url);
+    sut = RemoteGetHome(httpClient, url: url);
     await mockHttpClientGetResponse(
-        url: url, jsonPath: productResponsePath, httpClient: httpClient);
+        url: url, jsonPath: homeResponsePath, httpClient: httpClient);
   });
 
   test('Should call HttpClient.get with correct values', () async {
-    await sut.getProducts();
+    await sut.getHome();
 
     verify(() => httpClient.get(url: url)).called(1);
   });
@@ -28,7 +28,7 @@ void main() {
   test('Should throw if HttpClient throws', () {
     mockHttpClientGetError(httpClient: httpClient, url: url);
 
-    final future = sut.getProducts();
+    final future = sut.getHome();
 
     expect(future, throwsA(const ServerError()));
   });
@@ -37,14 +37,14 @@ void main() {
     mockHttpClientGetCall(url: url, httpClient: httpClient)
         .thenAnswer((_) => null);
 
-    final future = sut.getProducts();
+    final future = sut.getHome();
 
     expect(future, throwsA(const ServerError()));
   });
 
-  test('Shoud return products on success', () async {
-    final products = await sut.getProducts();
+  test('Shoud return home on success', () async {
+    final home = await sut.getHome();
 
-    expect(products, [baseProduct]);
+    expect(home, baseHome);
   });
 }
