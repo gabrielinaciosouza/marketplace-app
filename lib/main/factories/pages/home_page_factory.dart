@@ -2,7 +2,7 @@ import '../../../presentation/presentation.dart';
 import '../../main.dart';
 
 Future<HomePage> get makeHomePage async {
-  final getProductsComposite = await makeGetProductsComposite;
+  final getHomeComposite = await makeGetHomeComposite;
 
-  return HomePage(HomeCubit(getProductsComposite));
+  return HomePage(HomeCubit(getHomeComposite));
 }

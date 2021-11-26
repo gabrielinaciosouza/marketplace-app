@@ -17,6 +17,8 @@ final baseProductData = ProductData.fromEntity(baseProduct);
 const baseCategory =
     Category(id: '619fdf2bfc0033173bd89206', name: 'Camisetas Masculinas');
 
+final baseCategoryViewModel = CategoryViewModel.fromEntity(baseCategory);
+
 final baseCategoryData = CategoryData.fromEntity(baseCategory);
 
 const baseHome = Home(products: [baseProduct], categories: [baseCategory]);

@@ -9,7 +9,10 @@ import '../../mocks.dart';
 
 class _MockCacheStorage extends Mock implements CacheStorage {}
 
+class _MockBox extends Mock implements Box {}
+
 CacheStorage get mockCacheStorage => _MockCacheStorage();
+Box get mockBox => _MockBox();
 
 When mockCacheStorageGetCall(
         {required String key, required CacheStorage cacheStorage}) =>

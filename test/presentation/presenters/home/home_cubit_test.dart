@@ -7,33 +7,36 @@ import 'package:mocktail/mocktail.dart';
 import '../../../mocks/mocks.dart';
 
 void main() {
-  late GetProducts getProducts;
+  late GetHome getHome;
   late HomeState state;
 
   setUp(() {
-    getProducts = mockGetProducts;
+    getHome = mockRemoteGetHome;
     state = HomeState.initialState();
-    mockGetProductsResponse(getProducts);
+    mockGetHomeResponse(getHome);
   });
 
   blocTest<HomeCubit, HomeState>(
-    'Should call GetProducts Usecase and return products',
-    build: () => HomeCubit(getProducts),
+    'Should call GetHome Usecase return and correct values',
+    build: () => HomeCubit(getHome),
     act: (cubit) => cubit.loadProducts(),
     expect: () => [
       state.copyWith(isLoading: true),
-      state.copyWith(isLoading: false, products: [baseProductViewModel]),
+      state.copyWith(
+          isLoading: false,
+          products: [baseProductViewModel],
+          categories: [baseCategoryViewModel]),
     ],
     verify: (_) {
-      verify(() => getProducts.getProducts()).called(1);
+      verify(() => getHome.getHome()).called(1);
     },
   );
 
   blocTest<HomeCubit, HomeState>(
     'Should emit PresentationError if GetProducts throws',
     build: () {
-      mockGetProductsError(getProducts: getProducts, exception: Exception());
-      return HomeCubit(getProducts);
+      mockGetHomeError(getHome);
+      return HomeCubit(getHome);
     },
     act: (cubit) => cubit.loadProducts(),
     expect: () => [
@@ -47,7 +50,7 @@ void main() {
       ),
     ],
     verify: (_) {
-      verify(() => getProducts.getProducts()).called(1);
+      verify(() => getHome.getHome()).called(1);
     },
   );
 }

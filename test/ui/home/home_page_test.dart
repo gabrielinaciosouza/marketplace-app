@@ -13,12 +13,12 @@ import '../../mocks/mocks.dart';
 
 void main() {
   late HomeCubit homeCubit;
-  late GetProducts getProducts;
+  late GetHome getHome;
 
   setUp(() {
-    getProducts = mockGetProducts;
-    homeCubit = HomeCubit(getProducts);
-    mockGetProductsResponse(getProducts);
+    getHome = mockRemoteGetHome;
+    homeCubit = HomeCubit(getHome);
+    mockGetHomeResponse(getHome);
   });
 
   Future<void> loadPage(WidgetTester tester) async => tester.pumpWidget(
@@ -34,7 +34,7 @@ void main() {
         () async {
           await loadPage(tester);
 
-          verify(() => getProducts.getProducts()).called(1);
+          verify(() => getHome.getHome()).called(1);
         },
       );
     },
@@ -87,7 +87,7 @@ void main() {
 
   testWidgets('Should present error if GetProducts throw serverError',
       (WidgetTester tester) async {
-    mockGetProductsError(getProducts: getProducts, exception: Exception());
+    mockGetHomeError(getHome);
 
     await loadPage(tester);
     await tester.pump();
@@ -98,18 +98,19 @@ void main() {
 
   testWidgets('Should call loadProducts on reload button click',
       (WidgetTester tester) async {
-    mockGetProductsError(getProducts: getProducts, exception: Exception());
+    mockGetHomeError(getHome);
     await loadPage(tester);
 
     await tester.pump();
     await tester.tap(find.byType(RetryButton));
 
-    verify(() => getProducts.getProducts()).called(2);
+    verify(() => getHome.getHome()).called(2);
   });
 
   testWidgets('Should render empty list message', (WidgetTester tester) async {
     await mockNetworkImages(() async {
-      mockGetProductsResponse(getProducts, response: []);
+      mockGetHomeResponse(getHome,
+          response: const Home(products: [], categories: []));
       await loadPage(tester);
 
       await tester.pump();
@@ -123,18 +124,18 @@ void main() {
     'Should scroll product list',
     (WidgetTester tester) async {
       await mockNetworkImages(() async {
-        mockGetProductsResponse(
-          getProducts,
-          response: List.generate(
-            4,
-            (index) => Product(
-                id: faker.guid.guid(),
-                name: index.toString(),
-                price: baseProduct.price,
-                imageUrl: baseProduct.imageUrl,
-                categoryId: baseProduct.categoryId),
-          ),
-        );
+        mockGetHomeResponse(getHome,
+            response: Home(
+                products: List.generate(
+                  4,
+                  (index) => Product(
+                      id: faker.guid.guid(),
+                      name: index.toString(),
+                      price: baseProduct.price,
+                      imageUrl: baseProduct.imageUrl,
+                      categoryId: baseProduct.categoryId),
+                ),
+                categories: []));
         await loadPage(tester);
 
         await tester.pump();
