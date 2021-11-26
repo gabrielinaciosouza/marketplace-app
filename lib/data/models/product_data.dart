@@ -24,6 +24,21 @@ class ProductData with EquatableMixin {
       imageUrl: json['imageUrl'],
       categoryId: json['categoryId']);
 
+  factory ProductData.fromEntity(Product product) => ProductData(
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      imageUrl: product.imageUrl,
+      categoryId: product.categoryId);
+
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'name': name,
+        'price': price,
+        'imageUrl': imageUrl,
+        'categoryId': categoryId
+      };
+
   Product toEntity() => Product(
       id: id,
       name: name,

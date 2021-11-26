@@ -15,6 +15,12 @@ When mockCacheStorageGetCall(
         {required String key, required CacheStorage cacheStorage}) =>
     when(() => cacheStorage.get(key: key));
 
+When mockCacheStorageSaveCall(
+        {required String key,
+        required Map<String, dynamic> value,
+        required CacheStorage cacheStorage}) =>
+    when(() => cacheStorage.save(key: key, value: value));
+
 Future<void> mockCacheStorageGetResponse(
         {required String key,
         required String jsonPath,
@@ -22,9 +28,23 @@ Future<void> mockCacheStorageGetResponse(
     mockCacheStorageGetCall(key: key, cacheStorage: cacheStorage)
         .thenAnswer((_) async => jsonToMap(jsonPath));
 
+Future<void> mockCacheStorageSaveResponse(
+        {required String key,
+        required Map<String, dynamic> value,
+        required CacheStorage cacheStorage}) async =>
+    mockCacheStorageSaveCall(key: key, cacheStorage: cacheStorage, value: value)
+        .thenAnswer((_) => Future.value());
+
 void mockCacheStorageGetError(
         {required String key, required CacheStorage cacheStorage}) =>
     mockCacheStorageGetCall(key: key, cacheStorage: cacheStorage)
+        .thenThrow(const ServerError());
+
+void mockCacheStorageSaveError(
+        {required String key,
+        required CacheStorage cacheStorage,
+        required Map<String, dynamic> value}) =>
+    mockCacheStorageSaveCall(key: key, cacheStorage: cacheStorage, value: value)
         .thenThrow(const ServerError());
 
 When mockBoxGetCall({required Box box, required String key}) =>

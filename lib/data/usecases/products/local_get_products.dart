@@ -8,9 +8,9 @@ class LocalGetProducts implements GetProducts {
   @override
   Future<List<Product>> getProducts() async {
     try {
-      final result = await _cacheStorage.get(key: 'products');
+      final result = await _cacheStorage.get(key: kProducts);
 
-      final List<dynamic>? products = result?['products'];
+      final List<dynamic>? products = result?[kProducts];
 
       if (products == null) throw const ServerError();
 

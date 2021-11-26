@@ -12,7 +12,7 @@ void main() {
 
   setUp(() async {
     cacheStorage = mockCacheStorage;
-    key = 'products';
+    key = kProducts;
     sut = LocalGetProducts(cacheStorage);
     await mockCacheStorageGetResponse(
         key: key, jsonPath: productResponsePath, cacheStorage: cacheStorage);

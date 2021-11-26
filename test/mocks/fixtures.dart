@@ -1,3 +1,4 @@
+import 'package:marketplace_app/data/data.dart';
 import 'package:marketplace_app/domain/domain.dart';
 import 'package:marketplace_app/presentation/presentation.dart';
 
@@ -10,3 +11,5 @@ const baseProduct = Product(
     categoryId: '2');
 
 final baseProductViewModel = ProductViewModel.fromEntity(baseProduct);
+
+final baseProductData = ProductData.fromEntity(baseProduct);
