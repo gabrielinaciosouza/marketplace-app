@@ -1,5 +1,4 @@
-import 'package:marketplace_app/domain/domain.dart';
-
+import '../../../domain/domain.dart';
 import '../../data.dart';
 
 class LocalSaveCategories implements SaveCategories {
