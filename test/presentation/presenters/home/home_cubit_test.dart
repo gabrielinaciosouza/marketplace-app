@@ -25,11 +25,40 @@ void main() {
       state.copyWith(
           isLoading: false,
           products: [baseProductViewModel],
-          categories: [baseCategoryViewModel]),
+          categories: [baseCategoryViewModel],
+          selectedCategory: baseCategoryViewModel),
     ],
     verify: (_) {
       verify(() => getHome.getHome()).called(1);
     },
+  );
+
+  blocTest<HomeCubit, HomeState>(
+    'Should not select category if state category is not null',
+    build: () => HomeCubit(getHome),
+    act: (cubit) => cubit.loadProducts(),
+    seed: () => state.copyWith(selectedCategory: otherCategoryViewModel),
+    expect: () => [
+      state.copyWith(isLoading: true, selectedCategory: otherCategoryViewModel),
+      state.copyWith(
+          isLoading: false,
+          products: [baseProductViewModel],
+          categories: [baseCategoryViewModel],
+          selectedCategory: otherCategoryViewModel),
+    ],
+    verify: (_) {
+      verify(() => getHome.getHome()).called(1);
+    },
+  );
+
+  blocTest<HomeCubit, HomeState>(
+    'Should select category',
+    build: () => HomeCubit(getHome),
+    act: (cubit) => cubit.selectCategory(baseCategoryViewModel),
+    seed: () => state.copyWith(selectedCategory: otherCategoryViewModel),
+    expect: () => [
+      state.copyWith(selectedCategory: baseCategoryViewModel),
+    ],
   );
 
   blocTest<HomeCubit, HomeState>(

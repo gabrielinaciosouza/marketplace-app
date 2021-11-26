@@ -30,7 +30,10 @@ class HomeCubit extends Cubit<HomeState> {
           .toList();
 
       emit(state.copyWith(
-          isLoading: false, products: products, categories: categories));
+          isLoading: false,
+          products: products,
+          categories: categories,
+          selectedCategory: _selectedCategory(categories)));
     } catch (error, stacktrace) {
       emit(
         state.copyWith(
@@ -42,4 +45,12 @@ class HomeCubit extends Cubit<HomeState> {
       addError(error, stacktrace);
     }
   }
+
+  CategoryViewModel? _selectedCategory(List<CategoryViewModel> categories) {
+    if (state.selectedCategory != null) return state.selectedCategory;
+    if (categories.isNotEmpty) return categories.first;
+  }
+
+  void selectCategory(CategoryViewModel categoryViewModel) =>
+      emit(state.copyWith(selectedCategory: categoryViewModel));
 }
