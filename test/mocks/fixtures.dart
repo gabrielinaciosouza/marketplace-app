@@ -13,3 +13,8 @@ const baseProduct = Product(
 final baseProductViewModel = ProductViewModel.fromEntity(baseProduct);
 
 final baseProductData = ProductData.fromEntity(baseProduct);
+
+const baseCategory =
+    Category(id: '619fdf2bfc0033173bd89206', name: 'Camisetas Masculinas');
+
+final baseCategoryData = CategoryData.fromEntity(baseCategory);
