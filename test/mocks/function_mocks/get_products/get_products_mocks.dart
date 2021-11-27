@@ -6,14 +6,11 @@ import '../../mocks.dart';
 
 class _MockGetProducts extends Mock implements GetProducts {}
 
-class _MockRemoteGetProducts extends Mock implements RemoteGetProducts {}
-
 class _MockLocalGetProducts extends Mock implements LocalGetProducts {}
 
 class _MockLocalSaveProducts extends Mock implements LocalSaveProducts {}
 
 GetProducts get mockGetProducts => _MockGetProducts();
-RemoteGetProducts get mockRemoteGetProducts => _MockRemoteGetProducts();
 LocalGetProducts get mockLocalGetProducts => _MockLocalGetProducts();
 LocalSaveProducts get mockLocalSaveProducts => _MockLocalSaveProducts();
 
