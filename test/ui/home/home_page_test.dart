@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloc_test/bloc_test.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,20 +12,26 @@ import 'package:mocktail_image_network/mocktail_image_network.dart';
 import '../../helpers/test_helpers.dart';
 import '../../mocks/mocks.dart';
 
+class MockHomeCubit extends Mock implements HomeCubit {}
+
 void main() {
   late HomeCubit homeCubit;
   late GetHome getHome;
+  late GetProductsByCategoryId getProductsByCategoryId;
+  late HomeCubit cubit;
 
   setUp(() {
+    cubit = MockHomeCubit();
     getHome = mockRemoteGetHome;
-    homeCubit = HomeCubit(getHome);
+    getProductsByCategoryId = mockGetProductsByCategoryId;
+    homeCubit = HomeCubit(getHome, getProductsByCategoryId);
     mockGetHomeResponse(getHome);
+    mockGetProductsByCategoryIdResponse(getProductsByCategoryId, id: '1');
   });
 
-  Future<void> loadPage(WidgetTester tester) async => tester.pumpWidget(
-        buildApp(
-          HomePage(homeCubit),
-        ),
+  Future<void> loadPage(WidgetTester tester, {HomeCubit? cubit}) async =>
+      tester.pumpWidget(
+        buildApp(HomePage(cubit ?? homeCubit)),
       );
 
   testWidgets(
@@ -136,7 +143,7 @@ void main() {
                     imageUrl: baseProduct.imageUrl,
                     categoryId: baseProduct.categoryId),
               ),
-              categories: []),
+              categories: [baseCategory]),
         );
         await loadPage(tester);
 
@@ -233,11 +240,11 @@ void main() {
         () async {
           mockGetHomeResponse(getHome,
               response: Home(
-                  products: [baseProduct],
+                  products: [otherProduct],
                   categories: List.generate(
                     3,
                     (index) => Category(
-                      id: faker.guid.guid(),
+                      id: index.toString(),
                       name: index.toString(),
                     ),
                   )));
@@ -249,18 +256,57 @@ void main() {
               find.byWidgetPredicate((widget) =>
                   widget is SelectedCategoryItem && widget.name == '0'),
               findsOneWidget);
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is ProductCard && widget.product.name == 'Iphone 12'),
+              findsOneWidget);
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is ProductCard && widget.product.name == 'Iphone 11'),
+              findsNothing);
 
           await tester.tap(find.byWidgetPredicate((widget) =>
               widget is CategoryItem && widget.categoryViewModel.name == '1'));
 
           await tester.pump();
 
+          verify(() => getProductsByCategoryId.getProductsByCategoryId('1'))
+              .called(1);
+
           expect(
               find.byWidgetPredicate((widget) =>
                   widget is SelectedCategoryItem && widget.name == '1'),
+              findsOneWidget);
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is ProductCard && widget.product.name == 'Iphone 12'),
+              findsNothing);
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is ProductCard && widget.product.name == 'Iphone 11'),
               findsOneWidget);
         },
       );
     },
   );
+
+  testWidgets('Should handle loading products by category id correctly',
+      (WidgetTester tester) async {
+    when(() => cubit.loadProducts()).thenAnswer((_) async => [baseProduct]);
+    when(() => cubit.close()).thenAnswer((_) => Future.value());
+
+    await mockNetworkImages(() async {
+      final state = HomeState.initialState();
+
+      whenListen(cubit,
+          Stream.value(state.copyWith(isLoadingProductsByCategoryId: true)),
+          initialState: state);
+
+      await loadPage(tester, cubit: cubit);
+
+      await tester.pump();
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    });
+  });
 }

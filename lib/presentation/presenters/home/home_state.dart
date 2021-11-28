@@ -3,43 +3,49 @@ import 'package:equatable/equatable.dart';
 import '../../presentation.dart';
 
 class HomeState with EquatableMixin {
-  final List<ProductViewModel> products;
   final List<CategoryViewModel> categories;
   final CategoryViewModel? selectedCategory;
   final bool isLoading;
+  final bool isLoadingProductsByCategoryId;
   final PresentationError presentationError;
 
   const HomeState._({
-    required this.products,
     required this.categories,
     this.selectedCategory,
     required this.isLoading,
+    required this.isLoadingProductsByCategoryId,
     required this.presentationError,
   });
 
   factory HomeState.initialState() => const HomeState._(
-        products: [],
         categories: [],
         isLoading: false,
+        isLoadingProductsByCategoryId: false,
         presentationError: PresentationError(errorOcurred: false),
       );
 
   HomeState copyWith({
-    List<ProductViewModel>? products,
     List<CategoryViewModel>? categories,
     CategoryViewModel? selectedCategory,
     bool? isLoading,
+    bool? isLoadingProductsByCategoryId,
     PresentationError? presentationError,
   }) =>
       HomeState._(
-        products: products ?? this.products,
         categories: categories ?? this.categories,
         selectedCategory: selectedCategory ?? this.selectedCategory,
         isLoading: isLoading ?? this.isLoading,
+        isLoadingProductsByCategoryId:
+            isLoadingProductsByCategoryId ?? this.isLoadingProductsByCategoryId,
         presentationError: presentationError ?? this.presentationError,
       );
 
   @override
-  List<Object?> get props =>
-      [products, categories, isLoading, presentationError, selectedCategory];
+  List<Object?> get props => [
+        categories,
+        isLoading,
+        isLoadingProductsByCategoryId,
+        presentationError,
+        selectedCategory
+      ];
 }

@@ -37,12 +37,15 @@ void main() {
     final localSaveCategories = LocalSaveCategories(cacheStorage);
     final localGetProducts = LocalGetProducts(cacheStorage);
     final localGetCategories = LocalGetCategories(cacheStorage);
+
     final homeComposite = HomeComposite(remoteGetHome, localSaveProducts,
         localSaveCategories, localGetProducts, localGetCategories);
+    final getProductsByCategoryId =
+        RemoteGetProductsByCategoryId(httpClient, url: url);
 
     final homePage = buildApp(
       HomePage(
-        HomeCubit(homeComposite),
+        HomeCubit(homeComposite, getProductsByCategoryId),
       ),
     );
 

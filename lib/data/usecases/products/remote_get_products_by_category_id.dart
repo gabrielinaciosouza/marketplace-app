@@ -1,15 +1,16 @@
 import '../../../domain/domain.dart';
 import '../../data.dart';
 
-class RemoteGetProducts implements GetProducts {
+class RemoteGetProductsByCategoryId implements GetProductsByCategoryId {
   final HttpClient _httpClient;
   final String url;
 
-  const RemoteGetProducts(this._httpClient, {required this.url});
+  const RemoteGetProductsByCategoryId(this._httpClient, {required this.url});
+
   @override
-  Future<List<Product>> getProducts() async {
+  Future<List<Product>> getProductsByCategoryId(String categoryId) async {
     try {
-      final result = await _httpClient.get(url: url);
+      final result = await _httpClient.get(url: '$url$categoryId');
 
       final List<dynamic>? products = result?[kProducts];
 

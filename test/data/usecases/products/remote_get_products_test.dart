@@ -9,41 +9,45 @@ import '../../../mocks/mocks.dart';
 void main() {
   late HttpClient httpClient;
   late String url;
-  late RemoteGetProducts sut;
+  late String categoryId;
+  late RemoteGetProductsByCategoryId sut;
 
   setUp(() async {
+    categoryId = faker.guid.guid();
     httpClient = mockHttpClient;
     url = faker.internet.httpsUrl();
-    sut = RemoteGetProducts(httpClient, url: url);
+    sut = RemoteGetProductsByCategoryId(httpClient, url: url);
     await mockHttpClientGetResponse(
-        url: url, jsonPath: productResponsePath, httpClient: httpClient);
+        url: '$url$categoryId',
+        jsonPath: productResponsePath,
+        httpClient: httpClient);
   });
 
   test('Should call HttpClient.get with correct values', () async {
-    await sut.getProducts();
+    await sut.getProductsByCategoryId(categoryId);
 
-    verify(() => httpClient.get(url: url)).called(1);
+    verify(() => httpClient.get(url: '$url$categoryId')).called(1);
   });
 
   test('Should throw if HttpClient throws', () {
-    mockHttpClientGetError(httpClient: httpClient, url: url);
+    mockHttpClientGetError(httpClient: httpClient, url: '$url$categoryId');
 
-    final future = sut.getProducts();
+    final future = sut.getProductsByCategoryId(categoryId);
 
     expect(future, throwsA(const ServerError()));
   });
 
   test('Should throw if HttpClient returns null', () {
-    mockHttpClientGetCall(url: url, httpClient: httpClient)
+    mockHttpClientGetCall(url: '$url$categoryId', httpClient: httpClient)
         .thenAnswer((_) => null);
 
-    final future = sut.getProducts();
+    final future = sut.getProductsByCategoryId(categoryId);
 
     expect(future, throwsA(const ServerError()));
   });
 
   test('Shoud return products on success', () async {
-    final products = await sut.getProducts();
+    final products = await sut.getProductsByCategoryId(categoryId);
 
     expect(products, [baseProduct]);
   });
