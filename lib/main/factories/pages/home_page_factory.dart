@@ -4,5 +4,6 @@ import '../../main.dart';
 Future<HomePage> get makeHomePage async {
   final getHomeComposite = await makeGetHomeComposite;
 
-  return HomePage(HomeCubit(getHomeComposite));
+  return HomePage(
+      HomeCubit(getHomeComposite, makeRemoteGetProductsByCategoryId));
 }

@@ -8,12 +8,18 @@ class ProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final products = context.watch<HomeCubit>().state.products;
-    final width = MediaQuery.of(context).size.width;
     return Flexible(
       flex: flex55,
-      child: Builder(
-        builder: (context) {
+      child: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          final products = state.selectedCategory?.products ?? [];
+          final width = MediaQuery.of(context).size.width;
+          if (state.isLoadingProductsByCategoryId) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
           if (products.isEmpty) {
             return const EmptyListMessage();
           }
